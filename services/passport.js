@@ -13,7 +13,7 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((user.id, done) => {
+passport.deserializeUser((id, done) => {
   // turning an id into a mongoose model instance
   // search collection, call done
   User.findById(id)

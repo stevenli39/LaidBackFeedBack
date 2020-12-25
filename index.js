@@ -11,13 +11,20 @@ mongoose.connect(keys.mongoURI);
 
 const app = express();
 
+// app.use wires up middleware 
+// middleware: small functions that handles pre-processing requests before they are sent off to route handlers 
+
 app.use(
   cookieSession({
     // maxAge is in miliseconds
-    maxAge: 30 * 24 * 60 * 60 * 1000
+    maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey]
   })
-)
+); 
+
+app.use(passport.initialize()); 
+app.use(passport.session()); 
+
 
 require('./routes/authRoutes')(app);
 
