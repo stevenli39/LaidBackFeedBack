@@ -30,21 +30,17 @@ passport.use(
     proxy: true
     // after permission granted, send them to route above
   },
-  (accessToken, refreshToken, profile, done) => {
-    User.findOne({ googleId: profile.id })
-      .then((existingUser) => {
-        if (existingUser) {
-          done(null, existingUser);
+  async (accessToken, refreshToken, profile, done) => {
+    const existingUser = await User.findOne({ googleId: profile.id })
+    if (existingUser) {
+        return done(null, existingUser);
           // we already have a record with given profile ID
           // if user doesn't exist, returns true else null
-        } else {
+    }
           // we don't have a user record with this ID, make a new record
-          new User({ googleId: profile.id })
-            .save()
-            .then(user => done(null, user));
           // call to .save, saves model instance to the database
-        }
-      })
+      const user = await new User({ googleId: profile.id }).save()
+      done(null, user); 
     }
   )
 );
